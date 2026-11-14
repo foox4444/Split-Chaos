@@ -45,7 +45,7 @@ class Player(pygame.sprite.Sprite):
         else:
             self.base_image = pygame.Surface(fallback_size, pygame.SRCALPHA)
             self.base_image.fill(fallback_color)
-            pygame.draw.rect(self.base_image, BLACK, (0, 0, * fallback_size), 3)
+            pygame.draw.rect(self.base_image, "black", (0, 0, * fallback_size), 3)
         self.image = self.base_image
         self.rect = self.image.get_rect(midbottom=(x, y))
         self.controls = controls
@@ -99,7 +99,7 @@ def game_loop():
     p1_controls = {"left": pygame.K_LEFT, "right": pygame.K_RIGHT, "jump": pygame.K_w}
     p2_controls = {"left": pygame.K_a, "right": pygame.K_d, "jump": pygame.K_UP}
     
-    player1 = PLayer(120, FLOOR_Y, p1_controls, image_filename="banana_player.png", target_height = 64)
+    player1 = Player(120, FLOOR_Y, p1_controls, image_filename="banana_player.png", target_height = 64)
     player2 = Player(220, FLOOR_Y, p2_controls, image_filename="player2.png", target_height=52, fallback_size=(52, 52))
     all_players = pygame.sprite.Group(player1, player2)
     half_width = SCREEN_WIDTH // 2
@@ -112,12 +112,34 @@ def game_loop():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 return
         keys = pygame.key.get_pressed()
+        player1.handle_input(keys)
+        player2.handle_input(keys)
+        
+        all_players.update()
+        world_surface.fill("light blue")
+        pygame.draw.rect(
+            world_surface,
+            "green",
+            (0, FLOOR_Y, WORLD_WIDTH, WORLD_HEIGHT - FLOOR_Y),
+        )
+        all_players.draw(world_surface)
+
+        
+        cam1 = get_camera_rect(player1.rect, half_width, SCREEN_HEIGHT)
+        cam2 = get_camera_rect(player2.rect, half_width, SCREEN_HEIGHT)
+        
+        screen.blit(world_surface, (0, 0), cam1)
+        screen.blit(world_surface, (half_width, 0), cam2)
+        pygame.draw.line(screen, "black", (half_width, 0), (half_width, SCREEN_HEIGHT), 4)
+        
+        pygame.display.flip()
+        clock.tick(FPS)
 
 def main_menu():
     global click
     while True:
         mx, my = pygame.mouse.get_pos()
-        screen.fill(0, 0, 0)
+        screen.fill((0, 0, 0))
         draw_text('Split Chaos', font, (255, 255, 255), screen, 200, 50)
         
         game_lever = pygame.Rect(400, 300, 200, 100)
@@ -141,10 +163,12 @@ def main_menu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     if game_lever.collidepoint(event.pos):
-                        pass
+                        game_loop()
                     if game_quit.collidepoint(event.pos):
                         pygame.quit()
                         sys.exit()
                         
         pygame.display.update()
         clock.tick(FPS)
+if __name__ == "__main__":
+    main_menu()
