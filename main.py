@@ -95,6 +95,7 @@ class Player(pygame.sprite.Sprite):
         
         self.vel_y += GRAVITY
         self.rect.y += self.vel_y
+        self.on_ground =False
         
         # More plat functions
         for plat in platforms:
@@ -127,12 +128,68 @@ def draw_text(text, font, color, surface, x, y):
 
 # Creates Levels
 LEVELS = [
-    {"world_width": 1600, "p1_spawn": (120, 620), "p2_spawn": (200, 620), "platforms": [pygame.Rect(0, 620, 450, 180), pygame.Rect(580, 560, 160, 25), pygame.Rect(830, 470, 160, 25), pygame.Rect(1100, 620, 500, 180)], "checkpoint": pygame.Rect(1480, 530, 60, 90)},
-    {"world_width": 1800, "p1_spawn": (100, 620), "p2_spawn": (170, 620), "platforms": [pygame.Rect(0, 620, 350, 180), pygame.Rect(460, 530, 140, 25), pygame.Rect(700, 430, 140, 25), pygame.Rect(940, 530, 140, 25), pygame.Rect(1180, 420, 150, 25), pygame.Rect(1430, 620, 370, 180)], "checkpoint": pygame.Rect(1680, 530, 60, 90)},
-    {"world_width": 2100, "p1_spawn": (90, 650), "p2_spawn": (150, 650), "platforms": [pygame.Rect(0, 650, 260, 150), pygame.Rect(380, 560, 110, 25), pygame.Rect(610, 460, 110, 25), pygame.Rect(840, 360, 110, 25), pygame.Rect(1080, 260, 120, 25), pygame.Rect(1340, 420, 100, 25), pygame.Rect(1580, 320, 100, 25), pygame.Rect(1800, 240, 300, 560)], "checkpoint": pygame.Rect(1980, 150, 60, 90)},
-    {"world_width": 2400, "p1_spawn": (80, 620), "p2_spawn": (140, 620), "platforms": [pygame.Rect(0, 620, 220, 180), pygame.Rect(360, 540, 85, 25), pygame.Rect(590, 450, 85, 25), pygame.Rect(830, 520, 80, 25), pygame.Rect(1070, 420, 85, 25), pygame.Rect(1310, 320, 80, 25), pygame.Rect(1560, 450, 75, 25), pygame.Rect(1800, 360, 75, 25), pygame.Rect(2050, 270, 75, 25), pygame.Rect(2220, 220, 180, 580)], "checkpoint": pygame.Rect(2300, 130, 60, 90)},
-    {"world_width": 2800, "p1_spawn": (70, 680), "p2_spawn": (130, 680), "platforms": [pygame.Rect(0, 680, 200, 120), pygame.Rect(340, 580, 70, 25), pygame.Rect(560, 480, 70, 25), pygame.Rect(790, 380, 65, 25), pygame.Rect(1030, 280, 65, 25), pygame.Rect(1280, 450, 65, 25), pygame.Rect(1520, 350, 60, 25), pygame.Rect(1760, 250, 60, 25), pygame.Rect(2010, 420, 60, 25), pygame.Rect(2260, 310, 60, 25), pygame.Rect(2500, 210, 60, 25), pygame.Rect(2640, 160, 160, 640)], "checkpoint": pygame.Rect(2710, 70, 60, 90)},
+    {"world_width": 1600, "p1_spawn": (120, 620), "p2_spawn": (200, 620), "platforms": [pygame.Rect(0, 620, 450, 180), pygame.Rect(580, 560, 160, 25), pygame.Rect(830, 470, 160, 25), pygame.Rect(1100, 620, 500, 180)], "checkpoint": pygame.Rect(1480, 530, 60, 90), "spikes": [],},
+    {"world_width": 1800, "p1_spawn": (100, 620), "p2_spawn": (170, 620), "platforms": [pygame.Rect(0, 620, 350, 180), pygame.Rect(460, 530, 150, 25), pygame.Rect(700, 430, 180, 25), pygame.Rect(970, 530, 150, 25), pygame.Rect(1210, 430, 160, 25), pygame.Rect(1450, 620, 350, 180)], "checkpoint": pygame.Rect(1680, 530, 60, 90), "spikes": [pygame.Rect(765, 410, 45, 20)],},
+    {"world_width": 2100, "p1_spawn": (90, 650), "p2_spawn": (150, 650), "platforms": [pygame.Rect(0, 650, 280, 150), pygame.Rect(380, 560, 140, 25), pygame.Rect(610, 460, 170, 25), pygame.Rect(870, 360, 140, 25), pygame.Rect(1100, 270, 170, 25), pygame.Rect(1360, 420, 140, 25), pygame.Rect(1590, 330, 140, 25), pygame.Rect(1800, 250, 300, 550)], "checkpoint": pygame.Rect(1980, 160, 60, 90), "spikes": [pygame.Rect(670, 440, 45, 20), pygame.Rect(1160, 250, 45, 20)],},
+    {"world_width": 2400, "p1_spawn": (80, 620), "p2_spawn": (140, 620), "platforms": [pygame.Rect(0, 620, 250, 180), pygame.Rect(360, 540, 130, 25), pygame.Rect(580, 450, 160, 25), pygame.Rect(830, 520, 130, 25), pygame.Rect(1050, 430, 160, 25), pygame.Rect(1300, 340, 130, 25), pygame.Rect(1530, 450, 130, 25), pygame.Rect(1760, 360, 160, 25), pygame.Rect(2010, 280, 130, 25), pygame.Rect(2200, 230, 200, 570)], "checkpoint": pygame.Rect(2300, 140, 60, 90), "spikes": [pygame.Rect(635, 430, 45, 20), pygame.Rect(1105, 410, 45, 20), pygame.Rect(1815, 340, 45, 20)],},
+    {"world_width": 2700, "p1_spawn": (70, 680), "p2_spawn": (130, 680), "platforms": [pygame.Rect(0, 680, 240, 120), pygame.Rect(340, 580, 120, 25), pygame.Rect(550, 490, 150, 25), pygame.Rect(790, 400, 120, 25), pygame.Rect(1010, 310, 150, 25), pygame.Rect(1260, 450, 120, 25), pygame.Rect(1480, 360, 120, 25), pygame.Rect(1700, 270, 150, 25), pygame.Rect(1950, 410, 120, 25), pygame.Rect(2170, 320, 150, 25), pygame.Rect(2400, 230, 120, 25), pygame.Rect(2560, 180, 140, 620)], "checkpoint": pygame.Rect(2610, 90, 60, 90), "spikes": [pygame.Rect(600, 470, 45, 20), pygame.Rect(1060, 290, 45, 20), pygame.Rect(1750, 250, 45, 20), pygame.Rect(2220, 300, 45, 20)],},
 ]
+
+
+# Winning Screen Function
+def win_screen(final_time=0.0):
+    restart_btn = pygame.Rect(SCREEN_WIDTH // 2 - 140, 310, 280, 65)
+    menu_btn = pygame.Rect(SCREEN_WIDTH // 2 - 140, 400, 280, 65)
+    sub_font = pygame.font.SysFont(None, 36)
+
+    while True:
+        mx, my = pygame.mouse.get_pos()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                return "menu"
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if restart_btn.collidepoint((mx, my)):
+                    return "restart"
+                if menu_btn.collidepoint((mx, my)):
+                    return "menu"
+
+        screen.fill("light blue")
+
+        # 1. Title Banner
+        title_surf = font.render("YOU WIN!", True, "gold")
+        title_shadow = font.render("YOU WIN!", True, "black")
+        title_rect = title_surf.get_rect(center=(SCREEN_WIDTH // 2, 160))
+        screen.blit(title_shadow, (title_rect.x + 3, title_rect.y + 3))
+        screen.blit(title_surf, title_rect)
+
+        # 2. Subtitle Text
+        sub_surf = sub_font.render("GOOD JOB Apple and Banana!", True, "black")
+        screen.blit(sub_surf, sub_surf.get_rect(center=(SCREEN_WIDTH // 2, 235)))
+        time_surf = sub_font.render(f"Fina; Time: {final_time:.2f} seconds", True, "black")
+        screen.blit(time_surf, time_surf.get_rect(center(SCREEN_WIDTH // 2, 272)))
+
+        # 3. Restart Button
+        restart_color = (240, 80, 80) if restart_btn.collidepoint((mx, my)) else (210, 45, 45)
+        pygame.draw.rect(screen, restart_color, restart_btn, border_radius=12)
+        pygame.draw.rect(screen, "black", restart_btn, 3, border_radius=12)
+        r_text = sub_font.render("Restart Game", True, "white")
+        screen.blit(r_text, r_text.get_rect(center=restart_btn.center))
+
+        # 4. Main Menu Button (Box first, then Text on top)
+        menu_color = (245, 195, 50) if menu_btn.collidepoint((mx, my)) else (225, 170, 30)
+        pygame.draw.rect(screen, menu_color, menu_btn, border_radius=12)
+        pygame.draw.rect(screen, "black", menu_btn, 3, border_radius=12)
+        m_text = sub_font.render("Main Menu", True, "black")
+        screen.blit(m_text, m_text.get_rect(center=menu_btn.center))
+
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
 
 # Game Function
 def game_loop():
@@ -152,6 +209,7 @@ def game_loop():
     player2 = Player(*level["p2_spawn"], p2_controls, image_filename="apple_player.png", target_height=52, fallback_size=(52, 52), flip_default=True)
     all_players = pygame.sprite.LayeredUpdates(player1, player2)
     half_width = SCREEN_WIDTH // 2
+    start_time = time.time()
     
     while True:
         for event in pygame.event.get():
@@ -173,11 +231,24 @@ def game_loop():
         
         all_players.update(level["world_width"], level["platforms"])
         
+        for spike in level.get("spikes", []):
+            hitbox = spike.inflate(-8, -4)
+            if player1.rect.colliderect(hitbox):
+                player1.respawn()
+            if player2.rect.colliderect(hitbox):
+                player2.respawn()
+        
         # Checks if both players are at the checkpoint and if they are then it moves on to the next level
         if player1.rect.colliderect(level["checkpoint"]) and player2.rect.colliderect(level["checkpoint"]):
             current_level += 1
             if current_level >= len(LEVELS):
-                return
+                final_time = time.time() - start_time
+                choice = win_screen(final_time)
+                if choice == "restart":
+                    current_level = 0
+                    start_time = time.time()
+                else:
+                    return
             level = LEVELS[current_level]
             world_surface = pygame.Surface((level["world_width"], WORLD_HEIGHT))
             player1.spawn_pos = level["p1_spawn"]
@@ -199,6 +270,12 @@ def game_loop():
         
         pygame.draw.rect(world_surface, (25, 15, 35), (0, WORLD_HEIGHT - 25, level["world_width"], 25),)
 
+        for spike in level.get("spikes", []):
+            for sx in range(spike.left, spike.right - 9, 15):
+                points = [(sx, spike.bottom), (sx + 7, spike.top), (sx + 15, spike.bottom),]
+                pygame.draw.polygon(world_surface, (220, 35, 45), points)
+                pygame.draw.polygon(world_surface, "black", points, 2)
+
         pygame.draw.rect(world_surface, "gold", level["checkpoint"], border_radius=8)
         pygame.draw.rect(world_surface, "black", level["checkpoint"], 3, border_radius=8)
         
@@ -213,6 +290,8 @@ def game_loop():
         screen.blit(world_surface, (half_width, 0), cam2)
         pygame.draw.line(screen, "black", (half_width, 0), (half_width, SCREEN_HEIGHT), 4)
         draw_text(f"Level {current_level +1}", font, "black", screen, 20, 20)
+        elapsed = time.time() - start_time
+        draw_text(f"Time: {elapsed:.1f}s", font, "black", screen, SCREEN_WIDTH - 260, 20)
         
         pygame.display.flip()
         clock.tick(FPS)
@@ -220,24 +299,40 @@ def game_loop():
 # Main Menu Function
 def main_menu():
     global click
+    
+    bg_path = resource_path("menu_bg.jpg")
+    if os.path.exists(bg_path):
+        menu_bg = pygame.image.load(bg_path).convert()
+        menu_bg = pygame.transform.smoothscale(menu_bg, (SCREEN_WIDTH, SCREEN_HEIGHT))
+    else:
+        menu_bg = None
+    
     while True:
         mx, my = pygame.mouse.get_pos()
-        screen.fill((0, 0, 0))
+        screen.blit(menu_bg, (0, 0))
         # Title in Main Menu
-        draw_text('Split Chaos', font, (255, 255, 255), screen, 200, 50)
+        title_box = pygame.Surface((420, 90), pygame.SRCALPHA)
+        pygame.draw.rect(title_box, (20, 22, 30, 215), (0, 0, 420, 90), border_radius=16)
+        pygame.draw.rect(title_box, (255, 215, 60), (0, 0, 420, 90), 3, border_radius=16)
+        screen.blit(title_box, (SCREEN_WIDTH // 2 -210, 45))
+        title_surf = font.render('Split Chaos', True, (255, 255, 255))
+        screen.blit(title_surf, title_surf.get_rect(center=(SCREEN_WIDTH // 2, 90)))
         
         # Button Stuff
         game_lever = pygame.Rect(400, 300, 200, 100)
         game_quit = pygame.Rect(400, 500, 200, 90)
         
-        gl_color = (245, 235, 201) if game_lever.collidepoint((mx, my)) else (243, 230, 187)
-        gq_color = (245, 235, 201) if game_quit.collidepoint((mx, my)) else (243, 230, 187)
-        
+        gl_color = (38, 72, 58) if game_lever.collidepoint((mx, my)) else (22, 28, 36)
+        gq_color = (85, 35, 45) if game_quit.collidepoint((mx, my)) else (22, 28, 36)
         pygame.draw.rect(screen, gl_color, game_lever, border_radius=5)
+        pygame.draw.rect(screen, (90, 210, 130), game_lever, 3, border_radius=12)
         pygame.draw.rect(screen, gq_color, game_quit, border_radius=5)
+        pygame.draw.rect(screen, (235, 95, 105), game_quit, 3, border_radius=12)
         
-        draw_text('Play', font, (243, 230, 187), screen, 420, 310)
-        draw_text('Quit', font, (243, 230, 187), screen, 420, 510)
+        play_surf = font.render('Play', True, (255, 255, 255))
+        quit_surf = font.render('Quit', True, (255, 255, 255))
+        screen.blit(play_surf, play_surf.get_rect(center=game_lever.center))
+        screen.blit(quit_surf, quit_surf.get_rect(center=game_quit.center))
         
         click = False
         for event in pygame.event.get():
