@@ -170,7 +170,7 @@ def win_screen(final_time=0.0):
         sub_surf = sub_font.render("GOOD JOB Apple and Banana!", True, "black")
         screen.blit(sub_surf, sub_surf.get_rect(center=(SCREEN_WIDTH // 2, 235)))
         time_surf = sub_font.render(f"Fina; Time: {final_time:.2f} seconds", True, "black")
-        screen.blit(time_surf, time_surf.get_rect(center(SCREEN_WIDTH // 2, 272)))
+        screen.blit(time_surf, time_surf.get_rect(center=(SCREEN_WIDTH // 2, 272)))
 
         # 3. Restart Button
         restart_color = (240, 80, 80) if restart_btn.collidepoint((mx, my)) else (210, 45, 45)
