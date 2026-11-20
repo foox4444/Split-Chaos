@@ -1,4 +1,4 @@
-Split Chaos is a two-player game that has a split screen and split controls. (Following the theme of Week 4) This was inspired by Scratch platformers.
+Split Chaos is a two-player game that has a split screen and split controls.
 How to play the game: 
 The first player (banana) uses the left and right arrow keys plus the "W" key.
 The second player (apple) uses the keys "A" and "D" and the up arrow key.
